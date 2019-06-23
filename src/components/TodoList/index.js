@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 
-const TodoList = (props) => {
-  const { todos } = props;
-
-  return (
+const TodoList = ({ todos, addTodo }) => (
+  <>
     <ul>
       {todos.map(todo => <li key={todo.id}>{todo.text}</li>)}
     </ul>
-  );
-};
+    <button type="submit" onClick={() => addTodo('Teste')}>Adicionar TODO</button>
+  </>
+);
 
 TodoList.propTypes = {
+  addTodo: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     text: PropTypes.string,
@@ -24,4 +24,8 @@ const mapStateToProps = state => ({
   todos: state.todos,
 });
 
-export default connect(mapStateToProps)(TodoList);
+const mapDispatchToProps = dispatch => ({
+  addTodo: text => dispatch({ type: 'ADD_TODO', payload: { text } }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
